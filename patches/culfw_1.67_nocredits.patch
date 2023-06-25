@@ -1,0 +1,82 @@
+diff -uar culfw_1.67/clib/clock.c culfw_1.67_nocredits/clib/clock.c
+--- culfw_1.67/clib/clock.c	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/clib/clock.c	2023-06-25 15:08:12.881855544 +0200
+@@ -181,8 +181,9 @@
+     LED_TOGGLE();
+ #endif
+ 
+-  if (credit_10ms < MAX_CREDIT) // 10ms/1s == 1% -> allowed talk-time without CD
+-    credit_10ms += 1;
++  /*if (credit_10ms < MAX_CREDIT) // 10ms/1s == 1% -> allowed talk-time without CD
++    credit_10ms += 1;*/
++  credit_10ms = MAX_CREDIT;
+ 
+ #ifdef HAS_ONEWIRE
+   // if HMS Emulation is on, check the HMS timer
+diff -uar culfw_1.67/clib/fht.c culfw_1.67_nocredits/clib/fht.c
+--- culfw_1.67/clib/fht.c	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/clib/fht.c	2023-06-25 15:08:52.902273170 +0200
+@@ -312,7 +312,7 @@
+       for(uint8_t i = 0 ; i < FHT_8V_NUM; i++ )
+         if(fht8v_buf[2*i] != FHT_8V_DISABLED )
+           cnt++;
+-      credit_10ms += (4*fht8v_ctsync);   // should be 3.75 = 75ms / 2 / 10
++      //credit_10ms += (4*fht8v_ctsync);   // should be 3.75 = 75ms / 2 / 10
+       
+     } else {                           // Valve position
+       uint8_t idx = (hb[0]-fht_hc0)*2;
+diff -uar culfw_1.67/clib/rf_moritz.c culfw_1.67_nocredits/clib/rf_moritz.c
+--- culfw_1.67/clib/rf_moritz.c	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/clib/rf_moritz.c	2023-06-25 15:14:20.452116022 +0200
+@@ -232,12 +232,12 @@
+   uint8_t hblen = dec[0]+1;
+   //1kb/s = 1 bit/ms. we send 1 sec preamble + hblen*8 bits
+   uint32_t sum = (longPreamble ? 100 : 0) + (hblen*8)/10;
+-  if (credit_10ms < sum) {
++  /*if (credit_10ms < sum) {
+     DS_P(PSTR("LOVF\r\n"));
+     return;
+   }
+   credit_10ms -= sum;
+-
++*/
+   // in Moritz mode already?
+   if(!moritz_on) {
+     rf_moritz_init();
+diff -uar culfw_1.67/clib/rf_receive.c culfw_1.67_nocredits/clib/rf_receive.c
+--- culfw_1.67/clib/rf_receive.c	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/clib/rf_receive.c	2023-06-25 15:15:00.925818859 +0200
+@@ -112,7 +112,7 @@
+   CLEAR_BIT( CC1100_IN_DDR,   CC1100_IN_PIN);
+   SET_BIT( CC1100_EICR, CC1100_ISC);  // Any edge of INTx generates an int.
+ 
+-  credit_10ms = MAX_CREDIT/2;
++  //credit_10ms = MAX_CREDIT/2;
+ 
+   for(int i = 1; i < RCV_BUCKETS; i ++)
+     bucket_array[i].state = STATE_RESET;
+diff -uar culfw_1.67/clib/rf_send.c culfw_1.67_nocredits/clib/rf_send.c
+--- culfw_1.67/clib/rf_send.c	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/clib/rf_send.c	2023-06-25 15:16:05.889737412 +0200
+@@ -101,11 +101,12 @@
+   // 12*800+1200+nbyte*(8*1000)+(bits*1000)+800+10000 
+   // message len is < (nbyte+2)*repeat in 10ms units.
+   int8_t i, j, sum = (nbyte+2)*repeat + addH + addL;
+-  if (credit_10ms < sum) {
++  /*if (credit_10ms < sum) {
+     DS_P(PSTR("LOVF\r\n"));
+     return;
+   }
+   credit_10ms -= sum;
++*/
+ 
+   LED_ON();
+ 
+diff -uar culfw_1.67/version.h culfw_1.67_nocredits/version.h
+--- culfw_1.67/version.h	2023-06-25 11:38:24.000000000 +0200
++++ culfw_1.67_nocredits/version.h	2023-06-25 15:16:32.986645545 +0200
+@@ -1,3 +1,3 @@
+ #define VERSION_1               1
+ #define VERSION_2               67
+-#define VERSION                 "1.67"
++#define VERSION                 "1.67_nocredits"
