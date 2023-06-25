@@ -1,4 +1,4 @@
-## Patched culfw firmware for CUN/CUL devices without rf duty cycle restrictions
+## Patched culfw firmware for CUN/CUL devices<br>without rf duty cycle restrictions
 This is version 1.6.7 of culfw without rf duty cycle restrictions.
 
 ### Compiling
