@@ -17,3 +17,5 @@ This is an experimental firmware and it should only be used in a shielded labora
 - Copyright Matthew Wire, 2014,2016
 
 #### License: GPL v2
+
+![Ralf Miunske](https://miunske.eu/github/?culfw_nocredits)
