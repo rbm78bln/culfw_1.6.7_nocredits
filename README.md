@@ -19,6 +19,9 @@ make all
 
 This builds a docker image, runs it as a container, and cleans up everything afterwards.
 
+### Precompiled hex-files
+In ```Devices/``` you can find precompiled (hex-)binaries for your devices.
+
 ### Flashing
 After compiling you can flash your freshly compiled hex-file (e.g. for the CULv3) using:
 
