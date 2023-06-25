@@ -3,7 +3,31 @@ This is version 1.6.7 of culfw without rf duty cycle restrictions.
 
 ### Compiling
 This is ancient code to be compiled with just-as-ancient avr-gcc v4.8.1. <br>
-It compiles perfectly using ancient Ubuntu 15.10 "Wily Werewolf".
+It compiles perfectly using ancient Ubuntu 15.10 "Wily Werewolf". <br>
+You will need the packages:
+- ```make```
+- ```binutils-avr```
+- ```gcc-avr```
+- ```avr-libc```
+
+### Compiling with docker
+Since compiling this ancient stuff is a pita, it can be compiled much more simple using:
+
+```
+make all
+```
+
+This builds a docker image, runs it as a container, and cleans up everything afterwards.
+
+### Flashing
+After compiling you can flash your freshly compiled hex-file (e.g. for the CULv3) using:
+
+```
+dfu-programmer atmega32u4 erase
+dfu-programmer atmega32u4 flash Devices/CUL/CUL_V3.hex
+```
+
+Running ```make flash_culv3``` basically does the same thing.
 
 ### Disclaimer
 This is an experimental firmware and it should only be used in a shielded laboratory from which no radio waves can escape. It should only ever be used for short-term testing purposes and should never be used in a productive environment. Using this firmware may result in regulatory violations.
